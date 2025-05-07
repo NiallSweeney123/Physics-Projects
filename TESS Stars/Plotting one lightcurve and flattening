@@ -1,0 +1,48 @@
+import lightkurve as lk
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import astropy.units as u
+
+
+star_name='TIC 413248763'
+sector=8
+search_result= lk.search_lightcurve(star_name, mission='TESS', sector=sector, exptime=120, author='SPOC')#print(len(search_result))
+lc=search_result.download()
+lc.plot()
+plt.savefig('LC1')
+
+
+lc['time'].mjd-lc[0]['time'].mjd
+lc['time'] =lc['time'].mjd-lc[0]['time'].mjd
+lc.errorbar( fmt='.', ecolor='LightGrey', color='teal')
+plt.xlabel('Time From Start of the Sector[BTJD days]')
+plt.savefig('LC2')
+
+
+#lc=lc.bin(15) #binning
+lc.errorbar(fmt='.', ecolor='LightGrey', color='teal')
+plt.xlabel('Time[ days]')
+plt.ylabel('Flux')
+plt.xlim(3.7, 4.3)
+plt.savefig('LC2')
+
+
+lc = lc.normalize()
+lc= lc.remove_outliers(sigma=6) # clip the light curve to remove deviant datapoints greater than 6 sigma
+lc=lc.flatten()
+
+lc['time'].mjd-lc[0]['time'].mjd
+lc['time'] =lc['time'].mjd-lc[0]['time'].mjd
+lc.errorbar( fmt='.', ecolor='LightGrey', color='teal')
+plt.xlabel('Time From Start of the Sector[BTJD days]')
+plt.savefig('LC3')
+
+
+
+#lc=lc.bin(15) #binning
+lc.errorbar(fmt='.', ecolor='LightGrey', color='teal')
+plt.xlabel('Time[ days]')
+plt.ylabel('Flux')
+plt.xlim(4.50,6)
+plt.savefig('LC4')

@@ -1,0 +1,54 @@
+import lightkurve as lk
+import matplotlib.pyplot as plt
+import numpy as np
+
+search_result= lk.search_lightcurve('TIC 307210830', mission='TESS', sector=39, exptime=120, author='SPOC')
+lc=search_result.download()
+lc = lc.normalize()
+lc= lc.remove_outliers(sigma=6) # clip the light curve to remove deviant datapoints greater than 6 sigma
+
+
+lc['time'].mjd-lc[0]['time'].mjd
+lc['time'] =lc['time'].mjd-lc[0]['time'].mjd
+lc.errorbar( fmt='.', ecolor='LightGrey', color='teal')
+plt.xlabel('Time From Start of the Sector[BTJD days]')
+plt.savefig('BLS1')
+
+period = np.linspace(1, 20, 10000) # searching 1 to 20 day 
+bls = lc.to_periodogram('bls', period=period)
+bls.plot();
+plt.savefig('BLS2')
+
+planet_b_period = bls.period_at_max_power
+planet_b_t0 = bls.transit_time_at_max_power
+planet_b_dur = bls.duration_at_max_power
+
+# Check the value for period and t0
+print(planet_b_period, planet_b_t0)
+
+ax =lc.fold(planet_b_period, planet_b_t0).scatter()
+ax.set_xlim(-1, 1);
+plt.savefig('BLS3')
+
+planet_b_mask = bls.get_transit_mask(period=planet_b_period,
+                                     transit_time=planet_b_t0,
+                                     duration=planet_b_dur)
+
+masked_lc = lc[~planet_b_mask]
+ax = masked_lc.scatter();
+lc[planet_b_mask].scatter(ax=ax, c='r', label='Masked');
+
+
+planet_b_model = bls.get_transit_model(period=planet_b_period,
+                                       transit_time=planet_b_t0,
+                                       duration=planet_b_dur)
+
+ax = lc.fold(planet_b_period, planet_b_t0).scatter()
+planet_b_model.fold(planet_b_period, planet_b_t0).plot(ax=ax, c='r', lw=2)
+ax.set_xlim(-1, 1);
+plt.savefig('BLS4')
+
+period = np.linspace(1, 20, 10000) # searching 1 to 20 day 
+bls = masked_lc.to_periodogram('bls', period=period)
+bls.plot();
+plt.savefig('BLS5')

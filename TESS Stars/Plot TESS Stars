@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-TESS_stars = pd.read_csv("TESS_stars.csv")
+TESS_stars = pd.read_csv("STARS.csv")
 
 print(len(TESS_stars))
 
@@ -30,7 +30,7 @@ for i in np.arange(len(TESS_stars)):
     plt.savefig('TIC_'+str(TESS_stars['TIC_ID'][i])+'.pdf')  
     plt.close()
 
-    #print(len(lc)) # print length of the light curves - currently commented out
-    #print(lc.flux[0]) # print first value of the  flux array - currently commented out 
+    #print(len(lc)) # print length of the light curves 
+    #print(lc.flux[0]) # print first value of the  flux array 
     
    

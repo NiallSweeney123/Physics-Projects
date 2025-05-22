@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
 
-wav_obj = wave.open('PurpleFinch2.wav', 'rb')
+wav_obj = wave.open('H:\Physics-Projects\Analysing Bird Chirps\PurpleFinch2.wav', 'rb')
 sample_freq = wav_obj.getframerate()
 print(f'The total number of samples {sample_freq} times per second')
 

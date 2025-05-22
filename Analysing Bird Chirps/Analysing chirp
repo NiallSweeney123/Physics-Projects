@@ -2,7 +2,7 @@ import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
 
-file_path = 'PurpleFinch2.wav'
+file_path = 'H:\Physics-Projects\Analysing Bird Chirps\PurpleFinch2.wav'
 sample_rate, data = wav.read(file_path)
 
 data = data.astype(float)
